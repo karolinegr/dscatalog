@@ -4,6 +4,7 @@ import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class CategoryResource {
         return ResponseEntity.ok().body(categoryDto);
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping
     public ResponseEntity<CategoryDTO> createCategory(
             @RequestBody CategoryDTO newCategory){
         CategoryDTO newCategoryDto = this.categoryService.createCategory(newCategory);
@@ -47,11 +48,18 @@ public class CategoryResource {
         return ResponseEntity.created(uri).body(newCategoryDto);
     }
 
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(
             @PathVariable Long id,
             @RequestBody CategoryDTO categoryUpdate){
         CategoryDTO updatedCategory = this.categoryService.updateCategory(id, categoryUpdate);
         return ResponseEntity.ok().body(updatedCategory);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable Long id){
+        this.categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 }
