@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +30,14 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAllPaged(Pageable pageRequest) {
-        Page<Product> pagedList = this.productRepository.findAll(pageRequest);
-        return pagedList.map(ProductDTO::new);
+    public Page<ProductDTO> findAllPaged(
+            Long categoryId,
+            String name,
+            Pageable pageRequest) {
+        List<Category> categories = categoryId == 0 ? null : List.of(categoryRepository.getReferenceById(categoryId));
+        Page<Product> pagedList = this.productRepository.find(categories, name, pageRequest);
+        productRepository.findProductsWithCategories(pagedList.getContent());
+        return pagedList.map(item -> new ProductDTO(item, item.getCategories()));
     }
 
     @Transactional(readOnly = true)
