@@ -36,7 +36,7 @@ public class ProductServiceIntegrationTests {
     @Test
     public void findAllPagedShouldReturnPageWhenPage0Size10(){
         PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<ProductDTO> result = productService.findAllPaged(pageRequest);
+        Page<ProductDTO> result = productService.findAllPaged(0L, "", pageRequest);
 
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
@@ -48,7 +48,7 @@ public class ProductServiceIntegrationTests {
     @Test
     public void findAllPagedShouldReturnEmptyPageWhenPageDoesNotExist(){
         PageRequest pageRequest = PageRequest.of(50, 10);
-        Page<ProductDTO> result = productService.findAllPaged(pageRequest);
+        Page<ProductDTO> result = productService.findAllPaged(0L, "", pageRequest);
 
         Assertions.assertTrue(result.isEmpty());
     }
@@ -56,7 +56,7 @@ public class ProductServiceIntegrationTests {
     @Test
     public void findAllPagedShouldSortedPageWhenSortByName(){
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
-        Page<ProductDTO> result = productService.findAllPaged(pageRequest);
+        Page<ProductDTO> result = productService.findAllPaged(0L, "", pageRequest);
 
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
